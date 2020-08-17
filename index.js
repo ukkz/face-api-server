@@ -7,7 +7,7 @@ const express = require('express');
 const multer = require('multer');
 
 // ポート
-const port = 8000;
+const port = process.env.PORT || 8000;
 
 // 顔認識モデル
 const faceDetectionNet = faceapi.nets.ssdMobilenetv1;
