@@ -6,6 +6,8 @@ const faceapi = require('face-api.js');
 const express = require('express');
 const multer = require('multer');
 
+// Express App
+const app = express();
 // ポート
 const port = process.env.PORT || 8000;
 
@@ -19,15 +21,17 @@ const { Canvas, Image, ImageData } = canvas;
 faceapi.env.monkeyPatch({ Canvas, Image, ImageData });
 
 // 動的に生成される画像（アップロードと認識後）が保存されるディレクトリ
-const save_img_dir = path.resolve(__dirname, './save');
+const save_img_dir = path.resolve(__dirname, './img');
 // 存在確認をしてなければ作成（Herokuデプロイ等のときしておかなければENOENTでエラー）
 if (!fs.existsSync(save_img_dir)) {
     fs.mkdirSync(save_img_dir);
 }
+// 指定ディレクトリ以下の画像ファイルに直接アクセスできるようにする
+app.use(express.static('img'));
 
 // 解析後の画像保存パス（ファイル名固定）
 // ここにアクセスすると解析後画像を取得できる
-const out_img_file = path.resolve(save_img_dir, 'detected.jpg');
+const out_img_file = path.resolve(save_img_dir, 'result.jpg');
 
 // 解析前の画像（アップロードされたやつ）が保存されるパス（ファイル名固定）
 const storage = multer.diskStorage({
@@ -74,7 +78,6 @@ async function run(target_filename) {
 
 // APIサーバーを起動
 // http://host:8000/ に、form-dataで "file" をキーとして画像をPOSTすればOK
-const app = express();
 const server = app.listen(port);
 app.post('/', upload.single('file'), async function(req, res, next) {
     // POSTされた画像の情報をJSONで取得

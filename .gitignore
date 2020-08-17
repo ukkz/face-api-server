@@ -1,4 +1,4 @@
 node_modules
 .DS_Store
-save/*.jpg
-save/*.png
+img/*.jpg
+img/*.png
