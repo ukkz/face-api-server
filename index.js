@@ -20,6 +20,10 @@ faceapi.env.monkeyPatch({ Canvas, Image, ImageData });
 
 // 動的に生成される画像（アップロードと認識後）が保存されるディレクトリ
 const save_img_dir = path.resolve(__dirname, './save');
+// 存在確認をしてなければ作成（Herokuデプロイ等のときしておかなければENOENTでエラー）
+if (!fs.existsSync(save_img_dir)) {
+    fs.mkdirSync(save_img_dir);
+}
 
 // 解析後の画像保存パス（ファイル名固定）
 // ここにアクセスすると解析後画像を取得できる
