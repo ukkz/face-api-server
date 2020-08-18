@@ -83,7 +83,12 @@ app.post('/', upload.single('file'), async function(req, res, next) {
     // POSTされた画像の情報をJSONで取得
     const file_info = JSON.stringify(req.file);
     // アップロードされたファイル名（オリジナル名）を確認
-    console.log('Uploaded', req.file.originalname);
+    if (req.file.originalname) {
+        console.log('Uploaded', req.file.originalname);
+    } else {
+        console.log('Uploaded file (originalname unknnown)');
+    }
+    
 
     // サーバーに保存後の画像ファイル名（固定だけど）を指定して顔認識を行う
     // awaitのためここでブロッキングに注意
